@@ -6,5 +6,5 @@ input_feature/*
 __pycache__/*
 metrics/__pycache__/*
 gammatone/gammatone/__pycache__/*
-dataset/*
+Dataset/*
 *.zip

@@ -7,10 +7,10 @@ from keras.layers import (Bidirectional, Conv2D, MaxPooling2D, Input, Concatenat
                         GlobalAveragePooling2D, add, Activation, Input, Flatten, Lambda, 
                         GlobalAveragePooling1D, Reshape, ELU, multiply)
 #from keras.layers.core import Dense, Activation, Dropout, Reshape, Permute
-from keras.layers.recurrent import GRU
-from keras.layers.normalization import BatchNormalization
+from keras.layers import GRU
+from keras.layers import BatchNormalization
 from keras.models import Model
-from keras.layers.wrappers import TimeDistributed
+from keras.layers import TimeDistributed
 from keras.optimizers import Adam
 from keras.models import load_model
 import keras

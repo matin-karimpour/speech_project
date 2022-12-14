@@ -24,8 +24,8 @@ class DataGenerator(object):
         self._feat_cls = cls_feature_class.FeatureClass(params=params, is_eval=self._is_eval)
         self._label_dir = self._feat_cls.get_label_dir()
         self._feat_dir = self._feat_cls.get_normalized_feat_dir()
-
-        self._filenames_list = list()
+        
+        self._filenames_list = []
         self._nb_frames_file = 0     # Using a fixed number of frames in feat files. Updated in _get_label_filenames_sizes()
         self._nb_mel_bins = self._feat_cls.get_nb_mel_bins()
         self._nb_ch = None
@@ -34,12 +34,11 @@ class DataGenerator(object):
         self._class_dict = self._feat_cls.get_classes()
         self._nb_classes = self._feat_cls.get_nb_classes()
         self._get_filenames_list_and_feat_label_sizes()
-
+        
         self._feature_batch_seq_len = self._batch_size*self._feature_seq_len
         self._label_batch_seq_len = self._batch_size*self._label_seq_len
         self._circ_buf_feat = None
         self._circ_buf_label = None
-
         if self._per_file:
             self._nb_total_batches = len(self._filenames_list)
         else:

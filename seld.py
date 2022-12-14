@@ -220,7 +220,7 @@ def main(argv):
             )
 
             sed_pred = evaluation_metrics.reshape_3Dto2D(pred[0]) > 0.5
-            doa_pred = evaluation_metrics.reshape_3Dto2D(pred[1] if params['doa_objective'] is 'mse' else pred[1][:, :, nb_classes:])
+            doa_pred = evaluation_metrics.reshape_3Dto2D(pred[1] if params['doa_objective'] == 'mse' else pred[1][:, :, nb_classes:])
 
             # Calculate the DCASE 2019 metrics - Detection-only and Localization-only scores
             sed_metric[epoch_cnt, :] = evaluation_metrics.compute_sed_scores(sed_pred, sed_gt, data_gen_val.nb_frames_1s())
@@ -288,7 +288,7 @@ def main(argv):
         print('\nLoading the best model and predicting results on the testing split')
         print('\tLoading testing dataset:')
         data_gen_test = cls_data_generator.DataGenerator(
-            params=params, split=split, shuffle=False, per_file=params['dcase_output'], is_eval=True if params['mode'] is 'eval' else False
+            params=params, split=split, shuffle=False, per_file=params['dcase_output'], is_eval=True if params['mode'] == 'eval' else False
         )
 
         model = keras_model.load_seld_model('{}_model.h5'.format(unique_name), params['doa_objective'])
@@ -299,7 +299,7 @@ def main(argv):
         )
 
         test_sed_pred = evaluation_metrics.reshape_3Dto2D(pred_test[0]) > 0.5
-        test_doa_pred = evaluation_metrics.reshape_3Dto2D(pred_test[1] if params['doa_objective'] is 'mse' else pred_test[1][:, :, nb_classes:])
+        test_doa_pred = evaluation_metrics.reshape_3Dto2D(pred_test[1] if params['doa_objective'] == 'mse' else pred_test[1][:, :, nb_classes:])
 
         if params['dcase_output']:
             # Dump results in DCASE output format for calculating final scores
@@ -324,7 +324,7 @@ def main(argv):
                 )
                 data_gen_test.write_output_format_file(output_file, output_dict)
 
-        if params['mode'] is 'dev':
+        if params['mode'] == 'dev':
             test_data_in, test_data_out = data_gen_test.get_data_sizes()
             test_gt = collect_test_labels(data_gen_test, test_data_out, nb_classes, params['quick_test'])
             test_sed_gt = evaluation_metrics.reshape_3Dto2D(test_gt[0])

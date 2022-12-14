@@ -11,16 +11,16 @@ def get_params(argv='1'):
         quick_test=False,     # To do quick test. Trains/test on small subset of dataset, and # of epochs
 
         # INPUT PATH
-        dataset_dir='C:\\JAVIER\\code\\DCASE2020-Task3\\base_folder',  # Base folder containing the foa/mic and metadata folders
+        dataset_dir='./Dataset/base_folder',  # Base folder containing the foa/mic and metadata folders
         #dataset_dir='/content/gdrive/My Drive/DCASE2020-Task3/base_folder',
 
         # OUTPUT PATH
-        feat_label_dir='C:\\JAVIER\\code\\DCASE2020-Task3\\input_feature\\baseline_log_mel',  # Directory to dump extracted features and labels
+        feat_label_dir='./Dataset/input_feature/baseline_log_mel',  # Directory to dump extracted features and labels
         #feat_label_dir='/content/gdrive/My Drive/DCASE2020-Task3/input_feature/gammatone_nomax_gcclogmel',
-        model_dir='C:\\JAVIER\\code\\DCASE2020-Task3\\outputs\\ratio-1\\models',   # Dumps the trained models and training curves in this folder
+        model_dir='./Dataset/outputs/ratio-1/models',   # Dumps the trained models and training curves in this folder
         dcase_output=True,     # If true, dumps the results recording-wise in 'dcase_dir' path.
                                # Set this true after you have finalized your model, save the output, and submit
-        dcase_dir='C:\\JAVIER\\code\\DCASE2020-Task3\\outputs\\ratio-1\\results',  # Dumps the recording-wise network output in this folder
+        dcase_dir='./Dataset/outputs/ratio-1/results',  # Dumps the recording-wise network output in this folder
 
         # DATASET LOADING PARAMETERS
         mode='eval',         # 'dev' - development or 'eval' - evaluation dataset
