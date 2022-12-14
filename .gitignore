@@ -7,4 +7,5 @@ __pycache__/*
 metrics/__pycache__/*
 gammatone/gammatone/__pycache__/*
 Dataset/*
+!Dataset/input_feature/baseline_log_mel/mic_wts
 *.zip
