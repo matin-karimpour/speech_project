@@ -2,23 +2,23 @@
 # The SELDnet architecture
 #
 
-from keras.layers import (Bidirectional, Conv2D, MaxPooling2D, Input, Concatenate,
+from tensorflow.keras.layers import (Bidirectional, Conv2D, MaxPooling2D, Input, Concatenate,
                         Dense, Activation, Dropout, Reshape, Permute,
                         GlobalAveragePooling2D, add, Activation, Input, Flatten, Lambda, 
                         GlobalAveragePooling1D, Reshape, ELU, multiply)
-#from keras.layers.core import Dense, Activation, Dropout, Reshape, Permute
-from keras.layers import GRU
-from keras.layers import BatchNormalization
-from keras.models import Model
-from keras.layers import TimeDistributed
-from keras.optimizers import Adam
-from keras.models import load_model
-import keras
-keras.backend.set_image_data_format('channels_first')
+#from tensorflow.keras.layers.core import Dense, Activation, Dropout, Reshape, Permute
+from tensorflow.keras.layers import GRU
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import TimeDistributed
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.models import load_model
+import tensorflow.keras
+tensorflow.keras.backend.set_image_data_format('channels_first')
 from IPython import embed
 import numpy as np
 
-import  keras.backend as K
+import  tensorflow.keras.backend as K
 import warnings # added
 
 # From https://github.com/keras-team/keras-applications/blob/e52c477/keras_applications/imagenet_utils.py#L235-L331
@@ -175,7 +175,7 @@ def channel_spatial_squeeze_excite(input_tensor, ratio=16):
     return x
 
 def _tensor_shape(tensor):
-    return getattr(tensor, '_keras_shape')
+    return getattr(tensor, 'shape')
 
 def get_model(data_in, data_out, dropout_rate, nb_cnn2d_filt, f_pool_size, t_pool_size,
               rnn_size, fnn_size, weights, doa_objective, baseline, ratio):
