@@ -17,7 +17,7 @@ import tensorflow.keras
 tensorflow.keras.backend.set_image_data_format('channels_first')
 from IPython import embed
 import numpy as np
-
+import tensorflow as tf
 import  tensorflow.keras.backend as K
 import warnings # added
 
@@ -217,16 +217,16 @@ def get_model(data_in, data_out, dropout_rate, nb_cnn2d_filt, f_pool_size, t_poo
     spec_cnn = Permute((2, 1, 3))(spec_cnn)
 
     # RNN
-    spec_rnn = Reshape((data_out[0][-2], -1))(spec_cnn)
+    """spec_rnn = Reshape((data_out[0][-2], -1))(spec_cnn)
     for nb_rnn_filt in rnn_size:
         spec_rnn = Bidirectional(
             GRU(nb_rnn_filt, activation='tanh', dropout=dropout_rate, recurrent_dropout=dropout_rate,
                 return_sequences=True),
             merge_mode='mul'
-        )(spec_rnn)
+        )(spec_rnn)"""
 
     # FC - DOA
-    doa = spec_rnn
+    doa = Reshape((data_out[0][-2], -1))(spec_cnn)
     for nb_fnn_filt in fnn_size:
         doa = TimeDistributed(Dense(nb_fnn_filt))(doa)
         doa = Dropout(dropout_rate)(doa)
@@ -235,7 +235,7 @@ def get_model(data_in, data_out, dropout_rate, nb_cnn2d_filt, f_pool_size, t_poo
     doa = Activation('tanh', name='doa_out')(doa)
 
     # FC - SED
-    sed = spec_rnn
+    sed = Reshape((data_out[0][-2], -1))(spec_cnn)
     for nb_fnn_filt in fnn_size:
         sed = TimeDistributed(Dense(nb_fnn_filt))(sed)
         sed = Dropout(dropout_rate)(sed)
@@ -245,11 +245,12 @@ def get_model(data_in, data_out, dropout_rate, nb_cnn2d_filt, f_pool_size, t_poo
     model = None
     if doa_objective is 'mse':
         model = Model(inputs=spec_start, outputs=[sed, doa])
-        model.compile(optimizer=Adam(), loss=['binary_crossentropy', 'mse'], loss_weights=weights)
+        model.compile(optimizer=Adam(), loss=['categorical_crossentropy', 'mse'], loss_weights=weights
+        )
     elif doa_objective is 'masked_mse':
         doa_concat = Concatenate(axis=-1, name='doa_concat')([sed, doa])
         model = Model(inputs=spec_start, outputs=[sed, doa_concat])
-        model.compile(optimizer=Adam(), loss=['binary_crossentropy', masked_mse], loss_weights=weights)
+        model.compile(optimizer=Adam(), loss=['categorical_crossentropy', masked_mse], loss_weights=weights)
     else:
         print('ERROR: Unknown doa_objective: {}'.format(doa_objective))
         exit()
@@ -260,11 +261,11 @@ def get_model(data_in, data_out, dropout_rate, nb_cnn2d_filt, f_pool_size, t_poo
 def masked_mse(y_gt, model_out):
     # SED mask: Use only the predicted DOAs when gt SED > 0.5
     sed_out = y_gt[:, :, :14] >= 0.5 #TODO fix this hardcoded value of number of classes
-    sed_out = keras.backend.repeat_elements(sed_out, 3, -1)
-    sed_out = keras.backend.cast(sed_out, 'float32')
+    sed_out = tf.keras.backend.repeat_elements(sed_out, 3, -1)
+    sed_out = tf.keras.backend.cast(sed_out, 'float32')
 
     # Use the mask to computed mse now. Normalize with the mask weights #TODO fix this hardcoded value of number of classes
-    return keras.backend.sqrt(keras.backend.sum(keras.backend.square(y_gt[:, :, 14:] - model_out[:, :, 14:]) * sed_out))/keras.backend.sum(sed_out)
+    return tf.keras.backend.sqrt(tf.keras.backend.sum(tf.keras.backend.square(y_gt[:, :, 14:] - model_out[:, :, 14:]) * sed_out))/tf.keras.backend.sum(sed_out)
 
 
 def load_seld_model(model_file, doa_objective):
