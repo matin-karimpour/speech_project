@@ -23,7 +23,7 @@ def get_params(argv='1'):
         dcase_dir='./Dataset/outputs/ratio-1/results',  # Dumps the recording-wise network output in this folder
 
         # DATASET LOADING PARAMETERS
-        mode='eval',         # 'dev' - development or 'eval' - evaluation dataset
+        mode='dev',         # 'dev' - development or 'eval' - evaluation dataset
         dataset='mic',       # 'foa' - ambisonic or 'mic' - microphone signals
 
         #FEATURE PARAMS
@@ -54,7 +54,7 @@ def get_params(argv='1'):
         rnn_size=[128, 128],        # RNN contents, length of list = number of layers, list value = number of nodes
         fnn_size=[128],             # FNN contents, length of list = number of layers, list value = number of nodes
         loss_weights=[1., 1000.],     # [sed, doa] weight for scaling the DNN outputs
-        nb_epochs=50,               # Train for maximum epochs
+        nb_epochs=10,               # Train for maximum epochs
         epochs_per_fit=5,           # Number of epochs per fit
         doa_objective='masked_mse',     # supports: mse, masked_mse. mse- original seld approach; masked_mse - dcase 2020 approach
         
